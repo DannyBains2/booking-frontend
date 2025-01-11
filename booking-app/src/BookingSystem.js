@@ -21,7 +21,7 @@ function BookingSystem() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch('http://localhost:5000/bookings');
+        const response = await fetch('https://booking-backend-w6q4.onrender.com/');
         const data = await response.json();
 
         // Transform backend data to camelCase and group by time slot
@@ -54,7 +54,7 @@ function BookingSystem() {
 
     if (name && roomNumber && numberOfPeople) {
       try {
-        const response = await fetch('http://localhost:5000/bookings', {
+        const response = await fetch('https://booking-backend-w6q4.onrender.com/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ time, name, roomNumber, numberOfPeople }),
@@ -81,7 +81,7 @@ function BookingSystem() {
 
     if (newName && newRoomNumber && newNumberOfPeople) {
       try {
-        const response = await fetch(`http://localhost:5000/bookings/${existingBooking.id}`, {
+        const response = await fetch(`https://booking-backend-w6q4.onrender.com/${existingBooking.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
