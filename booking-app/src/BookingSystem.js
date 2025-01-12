@@ -113,6 +113,32 @@ function BookingSystem() {
     }
   };
 
+  const handleDeleteBooking = async (time, index) => {
+    const bookingToDelete = bookings[time][index];
+
+    try {
+      const response = await fetch(`https://booking-backend-w6q4.onrender.com/bookings/${bookingToDelete.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setBookings((prevBookings) => {
+          const updatedBookings = [...prevBookings[time]];
+          updatedBookings.splice(index, 1);
+
+          return {
+            ...prevBookings,
+            [time]: updatedBookings,
+          };
+        });
+      } else {
+        console.error('Failed to delete booking:', await response.text());
+      }
+    } catch (error) {
+      console.error('Failed to delete booking:', error);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-8">Hotel Restaurant Booking System</h1>
