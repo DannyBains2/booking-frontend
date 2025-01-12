@@ -198,6 +198,12 @@ function BookingSystem() {
                         >
                           Edit
                         </button>
+                        <button
+                          className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 ml-2"
+                          onClick={() => handleDeleteBooking(time, index)}
+                        >
+                          Delete
+                        </button>
                       </td>
                     </tr>
                   ))}
