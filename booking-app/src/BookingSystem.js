@@ -144,19 +144,33 @@ function BookingSystem() {
       <h1 className="text-2xl font-bold text-center mb-8">Hotel Restaurant Booking System</h1>
 
       <div className="mb-4 text-center">
-        <button
-          className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-          onClick={() =>
-            setBookings(
-              timeSlots.reduce((acc, time) => {
-                acc[time] = [];
-                return acc;
-              }, {})
-            )
-          }
-        >
-          Clear All Bookings
-        </button>
+      <button
+  className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+  onClick={async () => {
+    try {
+      // Send a DELETE request to clear all bookings from the backend
+      const response = await fetch('https://booking-backend-w6q4.onrender.com/bookings', {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Clear the local state only if the backend deletion is successful
+        setBookings(
+          timeSlots.reduce((acc, time) => {
+            acc[time] = [];
+            return acc;
+          }, {})
+        );
+      } else {
+        console.error('Failed to clear bookings:', await response.text());
+      }
+    } catch (error) {
+      console.error('Error while clearing bookings:', error);
+    }
+  }}
+>
+  Clear All Bookings
+</button>
       </div>
 
       <div className="space-y-6">
