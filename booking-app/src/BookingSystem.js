@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useKeepAwake } from 'expo-keep-awake';
 
 const timeSlots = [
   '5:00 PM', '5:15 PM', '5:30 PM', '5:45 PM',
@@ -11,8 +10,6 @@ const timeSlots = [
 ];
 
 function BookingSystem() {
-  useKeepAwake();
-
   const [bookings, setBookings] = useState(
     timeSlots.reduce((acc, time) => {
       acc[time] = [];
