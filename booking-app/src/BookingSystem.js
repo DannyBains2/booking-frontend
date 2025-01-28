@@ -258,28 +258,32 @@ function BookingSystem() {
 
   const [wakeLock, setWakeLock] = useState(null);
 
-  // Screen Wake Lock functionality
-  useEffect(() => {
-    const enableWakeLock = async () => {
-      try {
-        if ('wakeLock' in navigator) {
-          const lock = await navigator.wakeLock.request('screen');
-          setWakeLock(lock);
+  // Function to request Screen Wake Lock
+  const requestWakeLock = async () => {
+    try {
+      if ('wakeLock' in navigator) {
+        const lock = await navigator.wakeLock.request('screen');
+        setWakeLock(lock);
 
-          console.log('Screen Wake Lock is active');
-          lock.addEventListener('release', () => {
-            console.log('Screen Wake Lock has been released');
-          });
-        } else {
-          console.warn('Wake Lock API is not supported in this browser.');
-        }
-      } catch (error) {
-        console.error('Failed to enable wake lock:', error);
+        console.log('Screen Wake Lock is active');
+
+        // Listen for the release event
+        lock.addEventListener('release', () => {
+          console.log('Screen Wake Lock has been released');
+        });
+      } else {
+        console.warn('Wake Lock API is not supported in this browser.');
       }
-    };
+    } catch (error) {
+      console.error('Failed to enable wake lock:', error);
+    }
+  };
 
-    enableWakeLock();
+  // Request wake lock on mount and handle cleanup on unmount
+  useEffect(() => {
+    requestWakeLock();
 
+    // Clean up wake lock on component unmount
     return () => {
       if (wakeLock) {
         wakeLock.release().catch((error) => console.error('Failed to release wake lock:', error));
@@ -293,7 +297,7 @@ function BookingSystem() {
         const response = await fetch('https://booking-backend-w6q4.onrender.com/bookings');
         const data = await response.json();
 
-        const formattedData = data.map(booking => ({
+        const formattedData = data.map((booking) => ({
           id: booking.id,
           time: booking.time,
           name: booking.name,
