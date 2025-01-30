@@ -101,8 +101,8 @@ function BookingSystem() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: newName,
-            roomNumber: newRoomNumber,
-            numberOfPeople: newNumberOfPeople,
+            room_number: newRoomNumber,
+            number_of_people: newNumberOfPeople,
           }),
         });
 
