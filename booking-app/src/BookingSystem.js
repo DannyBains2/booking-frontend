@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useWakeLock } from 'react-screen-wake-lock';
 
 const timeSlots = [
   '5:00 PM', '5:15 PM', '5:30 PM', '5:45 PM',
@@ -10,12 +11,26 @@ const timeSlots = [
 ];
 
 function BookingSystem() {
+  const { isSupported, released, request, release } = useWakeLock();
   const [bookings, setBookings] = useState(
     timeSlots.reduce((acc, time) => {
       acc[time] = [];
       return acc;
     }, {})
   );
+
+  // Request wake lock on mount and release on unmount
+  useEffect(() => {
+    if (isSupported) {
+      request().catch((error) => console.error('Failed to enable wake lock:', error));
+    }
+
+    return () => {
+      if (isSupported) {
+        release().catch((error) => console.error('Failed to release wake lock:', error));
+      }
+    };
+  }, [isSupported, request, release]);
 
   // Fetch bookings from the backend on load
   useEffect(() => {
@@ -142,7 +157,13 @@ function BookingSystem() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold text-center mb-8">Hotel Restaurant Booking System</h1>
-
+      {!isSupported ? (
+        <p className="text-red-500 text-center mb-4">Wake Lock API is not supported in this browser.</p>
+      ) : (
+        <p className="text-green-500 text-center mb-4">
+          Wake Lock is {released ? 'inactive' : 'active'}.
+        </p>
+      )}
       <div className="mb-4 text-center">
       <button
   className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
